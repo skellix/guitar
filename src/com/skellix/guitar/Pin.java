@@ -32,7 +32,7 @@ public class Pin {
 			e.printStackTrace();
 		}
 		
-		return "";
+		return NONE;
 	}
 	
 	public void setDirection(String direction) {
@@ -53,7 +53,7 @@ public class Pin {
 			e.printStackTrace();
 		}
 		
-		return "";
+		return NONE;
 	}
 	
 	public void setValue(String value) {

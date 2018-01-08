@@ -1,22 +1,29 @@
 package com.skellix.guitar;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class Main implements Runnable {
 
+	private Robot robot;
+
 	public static void main(String[] args) {
 		System.out.println("starting");
 		new Main().run();
-		System.out.println("stopping");
 	}
 	
 	public Main() {
 		Options.setBasic();
-		
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	@Override
@@ -25,6 +32,7 @@ public class Main implements Runnable {
 			
 			@Override
 			public void run() {
+				System.out.println("stopping");
 				unexportPin(2);
 				unexportPin(3);
 				unexportPin(4);
@@ -42,7 +50,51 @@ public class Main implements Runnable {
 		Pin pin7 = exportPin(7);
 		
 		pin2.setDirection(Pin.DIRECTION_IN);
-		System.out.println("pin 2 value:" + pin2.getValue());
+		pin3.setDirection(Pin.DIRECTION_IN);
+		pin4.setDirection(Pin.DIRECTION_IN);
+		pin5.setDirection(Pin.DIRECTION_IN);
+		pin6.setDirection(Pin.DIRECTION_IN);
+		pin7.setDirection(Pin.DIRECTION_IN);
+		
+		Pin[] keys = new Pin[] {pin2, pin3, pin4, pin5, pin6};
+		
+		char[] keyMapping = new char[] {
+				'Z','X','C','V','B','N','M','<','>','/',
+				'S','D','G','H','J','L',';',
+				'Q','W','E','R','T','Y','U','I','O','P','[',']',
+				'2','3','5','6','7','9','0','=','\n',
+				};
+		
+		while (true) {
+			
+			int code = 0;
+			
+			for (int i = 0 ; i < keys.length ; i ++) {
+				
+				Pin key = keys[i];
+				String value = key.getValue();
+				
+				if (value.equals(Pin.VALUE_HIGH)) {
+					
+					code = (code << 1) | 1;
+					
+				} else if (value.equals(Pin.VALUE_LOW)) {
+					
+					code = (code << 1) | 0;
+					
+				} else if (value.equals(Pin.NONE)) {
+					
+					code = (code << 1) | 0;
+				}
+				
+				if (code > 0 && code <= keyMapping.length) {
+					
+					robot.keyPress(keyMapping[code - 1]);
+				}
+			}
+		}
+		
+//		System.out.println("pin 2 value:" + pin2.getValue());
 	}
 	
 	private Pin exportPin(int pin) {
