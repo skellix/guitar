@@ -1,3 +1,3 @@
 build: src/com/skellix/guitar/*.java
-	mkdir bin
+	mkdir -p bin
 	javac -d bin $^
