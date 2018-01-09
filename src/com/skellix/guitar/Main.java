@@ -81,15 +81,15 @@ public class Main implements Runnable {
 				
 				Pin key = keys[i];
 				String value = key.getValue();
-				System.out.println("pin " + i + " = " + value);
+//				System.out.println("pin " + i + " = " + value);
 				
 				if (value.equals(Pin.VALUE_HIGH)) {
 					
-					code = (code << 1) | 1;
+					code = (code << 1) | 0;
 					
 				} else if (value.equals(Pin.VALUE_LOW)) {
 					
-					code = (code << 1) | 0;
+					code = (code << 1) | 1;
 					
 				} else if (value.equals(Pin.NONE)) {
 					
@@ -97,7 +97,7 @@ public class Main implements Runnable {
 				}
 			}
 			
-			code = 0b11111 ^ code;
+//			code = 0b11111 ^ code;
 			
 			if (code > 0 && code <= keyMapping.length) {
 				
