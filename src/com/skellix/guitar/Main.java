@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main implements Runnable {
 
@@ -28,10 +29,12 @@ public class Main implements Runnable {
 
 	@Override
 	public void run() {
+		final AtomicBoolean exit = new AtomicBoolean(false);
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
+				exit.set(true);
 				System.out.println("stopping");
 				unexportPin(2);
 				unexportPin(3);
@@ -65,14 +68,20 @@ public class Main implements Runnable {
 				'2','3','5','6','7','9','0','=','\n',
 				};
 		
+		outer:
 		while (true) {
 			
 			int code = 0;
 			
 			for (int i = 0 ; i < keys.length ; i ++) {
 				
+				if (exit.get()) {
+					break outer;
+				}
+				
 				Pin key = keys[i];
 				String value = key.getValue();
+				System.out.println("pin " + i + " = " + value);
 				
 				if (value.equals(Pin.VALUE_HIGH)) {
 					
@@ -86,13 +95,13 @@ public class Main implements Runnable {
 					
 					code = (code << 1) | 0;
 				}
+			}
+			
+			if (code > 0 && code <= keyMapping.length) {
 				
-				if (code > 0 && code <= keyMapping.length) {
-					
-					System.out.println("code: " + code);
-					
-					robot.keyPress(keyMapping[code - 1]);
-				}
+				System.out.println("code: " + code);
+				
+				robot.keyPress(keyMapping[code - 1]);
 			}
 		}
 		
