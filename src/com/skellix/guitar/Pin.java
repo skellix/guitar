@@ -48,7 +48,7 @@ public class Pin {
 		
 		try {
 			byte[] bytes = Files.readAllBytes(valuePath);
-			return new String(bytes);
+			return new String(bytes).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
