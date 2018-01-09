@@ -81,7 +81,7 @@ public class Main implements Runnable {
 				
 				Pin key = keys[i];
 				String value = key.getValue();
-//				System.out.println("pin " + i + " = " + value);
+				System.out.println("pin " + i + " = " + value);
 				
 				if (value.equals(Pin.VALUE_HIGH)) {
 					
@@ -101,7 +101,7 @@ public class Main implements Runnable {
 			
 			if (code > 0 && code <= keyMapping.length) {
 				
-				System.out.println("code: " + code);
+//				System.out.println("code: " + code);
 				
 				robot.keyPress(keyMapping[code - 1]);
 			}
