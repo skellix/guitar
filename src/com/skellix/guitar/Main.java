@@ -97,6 +97,8 @@ public class Main implements Runnable {
 				}
 			}
 			
+			code = 0b11111 ^ code;
+			
 			if (code > 0 && code <= keyMapping.length) {
 				
 				System.out.println("code: " + code);
