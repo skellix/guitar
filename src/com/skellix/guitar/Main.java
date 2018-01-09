@@ -89,6 +89,8 @@ public class Main implements Runnable {
 				
 				if (code > 0 && code <= keyMapping.length) {
 					
+					System.out.println("code: " + code);
+					
 					robot.keyPress(keyMapping[code - 1]);
 				}
 			}
